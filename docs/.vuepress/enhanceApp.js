@@ -9,21 +9,27 @@ export default ({
 }) => {
     const name = window.localStorage.getItem("visitor_name");
     const avatar = window.localStorage.getItem("visitor_avatar");
-    if (name || avatar)
-        Vue.prototype.$visitor = {
-            name,
-            avatar
-        };
+    Vue.prototype.$visitor = { name, avatar };
     router.beforeEach((to, from, next) => {
         const code = to.query.code;
-        if (to.query.code && !Vue.prototype.$visitor) {
-            getToken({ code: to.query.code }).then((res) => {
-                window.localStorage.setItem("visitor_name", res.data.data.name);
-                window.localStorage.setItem(
-                    "visitor_avatar",
-                    res.data.data.avatar_url
-                );
-            });
+        if (
+            to.query.code &&
+            !Vue.prototype.$visitor.name &&
+            !Vue.prototype.$visitor.avatar
+        ) {
+            getToken({ code: to.query.code })
+                .then(res => {
+                    window.localStorage.setItem("visitor_name", res.data.name);
+                    window.localStorage.setItem(
+                        "visitor_avatar",
+                        res.data.avatar_url
+                    );
+                    Vue.prototype.$visitor.name = res.data.name;
+                    Vue.prototype.$visitor.avatar = res.data.avatar_url;
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         }
         next();
     });

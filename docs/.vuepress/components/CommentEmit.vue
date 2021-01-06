@@ -1,6 +1,6 @@
 <template>
     <div class="comment">
-        <User :visitor="$visitor || {}"></User>
+        <User :visitor="visitor"></User>
         <input
             type="text"
             class="comment-input"
@@ -20,7 +20,8 @@ export default {
     },
     data() {
         return {
-            content: ""
+            content: "",
+            visitor: this.$visitor
         };
     },
     methods: {

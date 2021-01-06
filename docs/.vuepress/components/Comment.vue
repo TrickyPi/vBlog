@@ -29,7 +29,7 @@ export default {
         //get all Comment
         getAllComment().then(res => {
             console.log(res);
-            this.commentLists = res.data.data;
+            this.commentLists = res.data;
         });
     }
 };
